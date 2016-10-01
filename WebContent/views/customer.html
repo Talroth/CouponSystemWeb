@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<!--  
+          <link href="../CSS/bootstrap.min.css" rel="stylesheet" />
+    <link href="../CSS/Roberto.css" rel="stylesheet">
+-->
+    <link href="../CSS/main.css" rel="stylesheet" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+<title>Insert title here</title>
+</head>
+<body ng-app = "customer" ng-controller = "customerController" ng-init="init()">
+<h1> title </h1>
+<h2> {{ userName }} </h2>
+    
+<div class="likes" ng-click=getAllPurchasedCoupons()>AllPurchasedCoupons
+</div>
+ <br />   
+<div class="likes" ng-click=getAllCoupons()>AllCoupons
+</div>    
+
+ <br />    
+ <input type="text" ng-model="price">  
+    
+ <div class="likes" ng-click=getAllPurchasedCouponsByPrice(price)>AllCoupons
+</div>     
+  <br /> 
+<select ng-model="couponType">
+    <option value="FOOD">FOOD
+    <option value="tuts">Tutorials
+    <option value="cars">Cars
+</select>
+ <br />   
+<div class="likes" ng-click=getAllPurchasedCouponsByType(couponType)>AllCoupons
+</div> 
+ <br />    
+ <div ng-repeat="coupon in couponList"  class="col-md-6"> 
+  <div class="thumbnail"> 
+    <img ng-src="../img/{{ coupon.image }}"> 
+    <p class="title">{{ coupon.title }}</p> 
+    <p class="price">{{ coupon.price | currency:" NIS " }}</p> 
+      <p class="date">Effective since: {{ coupon.startDate | date }}</p>
+      <p class="date">Expiry date: {{ coupon.endDate | date }}</p>
+      <p class="message"> {{ coupon.message}}</p>
+      <p class="coupontype">{{ coupon.type }} </p>
+      <p class="date">{{coupon.amount}} </p>
+      <div class="rating">
+        <p class="likes" ng-click=purchaseCoupon(coupon)>Purchase </p>
+    </div>
+    </p> 
+  </div> 
+</div>
+
+
+    <div class="footer">
+      <div class="container">
+        <h2>Available for iPhone and Android.</h2>
+        <img src="https://s3.amazonaws.com/codecademy-content/projects/shutterbugg/app-store.png" width="120px" />
+        <img src="https://s3.amazonaws.com/codecademy-content/projects/shutterbugg/google-play.png" width="110px" />
+      </div>
+    </div>
+
+    <!-- Modules 
+    <script src="../app/app.js"></script>
+    -->
+
+    <!-- Controllers -->
+    <script src="../app/controllers/customerController.js"></script>
+</body>
+</html>
