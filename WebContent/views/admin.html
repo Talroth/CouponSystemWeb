@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+        <link href="../CSS/main.css" rel="stylesheet" /> 
+    <link rel="stylesheet" href="../CSS/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="../app/js/angular-animate.min.js"></script>
+    <script src="../app/js/angular-material.min.js"></script>
+     <script src="../app/controllers/adminController.js"></script> 
+    <script src="../app/js/myComponent.js"></script>
+</head>
+<body ng-app = "admin" ng-controller = "adminController" ng-init="init()">
+<md-button class="md-raised md-primary" ng-click=getAllCustomer()>Customers</md-button>
+    
+<table>
+    <th ng-repeat="h in customerHeaders">{{ h.name }}</th>
+    <tr ng-repeat="cust in customerList">
+        <td><input type="text" ng-model="cust.id" disabled /></td>
+        <td><input type="text" ng-model="cust.custName" disabled /></td>
+        <td><input type="text" ng-model="cust.password" /></td>
+        <td><md-button ng-click="updateCustomer({'custName': cust.custName, 'id': cust.id, 'password': cust.password })">Save</md-button></td>
+    </tr>
+</table> 
+</body>
+</html>
