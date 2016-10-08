@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link href="../CSS/main.css" rel="stylesheet" />
+<link rel="stylesheet" href="../CSS/angular-material.min.css">
+<link rel="stylesheet" href="../CSS/md-data-table.min.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+<script
+	src="../app/js/md-data-table.min.js"></script>	
+<script src="../app/js/angular-animate.min.js"></script>
+<script src="../app/js/angular-material.min.js"></script>
+<script src="../app/controllers/adminController.js"></script>
+<script src="../app/js/myComponent.js"></script>
+</head>
+<body ng-app="admin" ng-controller="adminController" ng-init="init()">
+	<md-button class="md-raised md-primary" ng-click="custTbl=true; compTbl=false; getAllCustomer()">Customers</md-button>
+	<md-button class="md-raised md-primary" ng-click="custTbl=false; compTbl=true; getAllCompanies()">Companies</md-button>
+	<md-input-container ng-show=custTbl class="md-block" flex-gt-sm>
+    <label>Search customer</label>
+    <input ng-model="search.custName">
+    </md-input-container>
+    
+	<md-input-container ng-show=compTbl class="md-block" flex-gt-sm>
+    <label>Search company</label>
+    <input ng-model="searchComp.compName">
+    </md-input-container>
+<md-table-container>
+  <table md-table ng-show=custTbl>
+    <thead md-head md-order="myOrder">
+      <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
+      <th md-column md-order-by="id" md-numric>{{customerHeaders[0].name }}</th>
+      <!-- the variable myOrder will not be changed when this cell is clicked -->
+      <th md-column md-order-by="custName">{{customerHeaders[1].name }}</th>
+      <th md-column>{{customerHeaders[2].name }}</th>
+      <th md-column><md-button class="md-fab md-primary">
+      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
+      </md-button></th>
+    </thead>
+    <tbody md-body>
+      <!-- we can let ng-repeat sort the columns for us -->
+      <tr md-row ng-repeat="cust in customerList | orderBy: myOrder | filter:search">
+      <td md-cell>{{cust.id}}</td>
+      <td md-cell>{{cust.custName}}</td>
+      <td md-cell><input type="text"
+					ng-model="cust.password" ng-change="passChanged = !passChanged" /></td>
+	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCustomer(cust); openToast(response)">Save</md-button></td>
+	 </tr>
+    </tbody>
+  </table>
+</md-table-container>
+
+<md-table-container>
+  <table md-table ng-show=compTbl>
+    <thead md-head md-order="myOrder">
+      <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
+      <th md-column md-order-by="id" md-numric>{{companyHeaders[0].name }}</th>
+      <!-- the variable myOrder will not be changed when this cell is clicked -->
+      <th md-column md-order-by="custName">{{companyHeaders[1].name }}</th>
+      <th md-column>{{companyHeaders[2].name }}</th>
+      <th md-column>{{companyHeaders[3].name }}</th>
+      <th md-column><md-button class="md-fab md-primary">
+      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
+      </md-button></th>
+    </thead>
+    <tbody md-body>
+      <!-- we can let ng-repeat sort the columns for us -->
+      <tr md-row ng-repeat="comp in companyList | orderBy: myOrder | filter:searchComp">
+      <td md-cell>{{comp.id}}</td>
+      <td md-cell>{{comp.compName}}</td>
+      <td md-cell><input type="text"
+					ng-model="comp.password" ng-change="passChanged = !passChanged" /></td>
+		<td md-cell>{{comp.email}}</td>			
+	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCompany(comp); openToast(response)">Save</md-button></td>
+	 </tr>
+    </tbody>
+  </table>
+</md-table-container>
+
+</body>
+</html>
