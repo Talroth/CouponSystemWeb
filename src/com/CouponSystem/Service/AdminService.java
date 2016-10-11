@@ -44,16 +44,15 @@ public class AdminService
 	@POST
 	@Path("/createCustomer")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String createCustomer(Customer customer)  {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Customer createCustomer(Customer customer)  {
 		try 
 		{
-			getFacade().createCustomer(customer);
-			return "ok";
+			return getFacade().createCustomer(customer);			 
 		} 
 		catch (FacadeException e) 
 		{
-			return e.getMessage();
+			return null;
 		}
 	}
 

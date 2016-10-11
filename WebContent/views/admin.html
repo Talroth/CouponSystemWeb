@@ -41,7 +41,7 @@
       <!-- the variable myOrder will not be changed when this cell is clicked -->
       <th md-column md-order-by="custName">{{customerHeaders[1].name }}</th>
       <th md-column>{{customerHeaders[2].name }}</th>
-      <th md-column><md-button class="md-fab md-primary">
+      <th md-column><md-button class="md-fab md-primary" ng-click="showDialog($event)">
       <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
       </md-button></th>
     </thead>
@@ -53,6 +53,7 @@
       <td md-cell><input type="text"
 					ng-model="cust.password" ng-change="passChanged = !passChanged" /></td>
 	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCustomer(cust); openToast(response)">Save</md-button></td>
+	<td md-cell><md-button class="md-raised md-primary"  ng-click="removeCustomerDialog($event,$index,cust,customerList); openToast(response)">Remove</md-button></td>
 	 </tr>
     </tbody>
   </table>
@@ -79,11 +80,10 @@
       <td md-cell><input type="text"
 					ng-model="comp.password" ng-change="passChanged = !passChanged" /></td>
 		<td md-cell>{{comp.email}}</td>			
-	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCompany(comp); openToast(response)">Save</md-button></td>
+	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCompany(comp); openToast(response)">Save</md-button></td>	
 	 </tr>
     </tbody>
   </table>
 </md-table-container>
-
 </body>
 </html>
