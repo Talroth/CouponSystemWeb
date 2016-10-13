@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link href="../CSS/main.css" rel="stylesheet" />
+<link rel="stylesheet" href="../CSS/angular-material.min.css">
+<link rel="stylesheet" href="../CSS/md-data-table.min.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+<script
+	src="../app/js/md-data-table.min.js"></script>	
+<script src="../app/js/angular-animate.min.js"></script>
+<script src="../app/js/angular-material.min.js"></script>
+<script src="../app/controllers/companyController.js"></script>
+<script src="../app/js/myComponent.js"></script>
+</head>
+<body ng-app="company" ng-controller="companyController" ng-init="init()" style="background-color: #85e085;">
+<h1>{{companyDetails.compName}} - {{companyDetails.email}}</h1>
+<md-table-container>
+  <table md-table>
+    <thead md-head md-order="myOrder">
+      <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
+      <th md-column md-order-by="id" md-numric>{{couponHeaders[0].name }}</th>
+      <!-- the variable myOrder will not be changed when this cell is clicked -->
+      <th md-column md-order-by="title">{{couponHeaders[1].name }}</th>
+      <th md-column>{{couponHeaders[2].name }}</th>
+      <th md-column>{{couponHeaders[3].name }}</th>
+      <th md-column md-numric>{{couponHeaders[4].name }}</th>
+      <th md-column>{{couponHeaders[5].name }}</th>
+      <th md-column>{{couponHeaders[6].name }}</th>
+      <th md-column md-numric>{{couponHeaders[7].name }}</th>
+
+    </thead>
+    <tbody md-body>
+      <!-- we can let ng-repeat sort the columns for us -->
+      <tr md-row ng-repeat="coupon in couponList | orderBy: myOrder | filter:search">
+      <td md-cell>{{coupon.id}}</td>
+      <td md-cell>{{coupon.title}}</td>
+      <td md-cell>{{coupon.startDate | date}}</td>
+      <td md-cell><md-datepicker  ng-model="dataMod[$index].dt"></md-datepicker></td>
+      <td md-cell>{{coupon.amount}}</td>
+      <td md-cell>{{coupon.type}}</td>	
+      <td md-cell>{{coupon.message}}</td>
+       <td md-cell><input type="text" style="background-color: #85e085; border: 1px solid #000000;"
+					ng-model="coupon.price"/></td>						
+	<td md-cell><md-button class="md-raised md-primary" ng-disabled="" ng-click="">Save</md-button>
+	<md-button class="md-raised md-primary"  ng-click="">Remove</md-button></td>
+	 </tr>
+    </tbody>
+  </table>
+  	  <md-button class="md-fab md-primary" ng-click="">
+      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
+      </md-button>
+</md-table-container>
+</body>
+</html>

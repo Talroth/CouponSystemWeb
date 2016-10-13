@@ -108,7 +108,7 @@ public class CompanyService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAllCoupons")
-	public Collection<Coupon> getAllCoupons()  {
+	public Collection<Coupon> getAllCoupons() throws FacadeException {
 
 		try 
 		{
@@ -116,7 +116,7 @@ public class CompanyService {
 		} 
 		catch (FacadeException e) 
 		{
-			return null;
+			throw e;
 		}
 	}
 

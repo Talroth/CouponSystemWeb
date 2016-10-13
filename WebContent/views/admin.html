@@ -101,10 +101,10 @@
 <tr md-row ng-repeat="coupon in couponList">
 <td md-cell>{{coupon.id}}</td>
 <td md-cell>{{coupon.title}}</td>
-<td md-cell>{{coupon.startDate}}</td>
-<td md-cell>{{coupon.endDate}}</td>
+<td md-cell>{{coupon.startDate | date}}</td>
+<td md-cell>{{coupon.endDate | date}}</td>
 <td md-cell>{{coupon.amount}}</td>
-<td md-cell>{{coupon.couponType}}</td>
+<td md-cell>{{coupon.type}}</td>
 </tr>
 </tbody>
 </table>
