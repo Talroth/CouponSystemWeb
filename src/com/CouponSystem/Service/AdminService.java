@@ -45,14 +45,16 @@ public class AdminService
 	@Path("/createCustomer")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Customer createCustomer(Customer customer)  {
+	public Customer createCustomer(Customer customer) throws FacadeException {
 		try 
 		{
 			return getFacade().createCustomer(customer);			 
 		} 
 		catch (FacadeException e) 
 		{
-			return null;
+			System.out.println("Exception was raised");
+			System.out.println("** " + e.getMessage());
+			throw e;
 		}
 	}
 
@@ -77,8 +79,8 @@ public class AdminService
 	@PUT
 	@Path("/updateCustomer")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String updateCustomer(Customer customer)  {
+	@Produces({MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON})
+	public String updateCustomer(Customer customer) throws FacadeException {
 		try 
 		{
 			getFacade().updateCustomer(customer);
@@ -86,7 +88,7 @@ public class AdminService
 		} 
 		catch (FacadeException e)
 		{
-			return e.getMessage();
+			throw e;
 		}
 	}
 
@@ -109,14 +111,14 @@ public class AdminService
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAllCustomer")
-	public Collection<Customer> getAllCustomer()  {
+	public Collection<Customer> getAllCustomer()  throws FacadeException {
 		try 
 		{
 			return getFacade().getAllCustomer();
 		} 
 		catch (FacadeException e) 
 		{
-			return null;
+			throw e;
 		}
 	}
 
@@ -124,17 +126,16 @@ public class AdminService
 	@POST
 	@Path("/createCompany")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String createCompany(Company company)  {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Company createCompany(Company company) throws FacadeException {
 
 		try 
 		{
-			getFacade().createCompany(company);
-			return "ok";
+			return getFacade().createCompany(company);
 		} 
 		catch (FacadeException e) 
 		{
-			return e.getMessage();
+			throw e;
 		}
 	}
 
@@ -159,8 +160,8 @@ public class AdminService
 	@PUT
 	@Path("/updateCompany")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String updateCompany(Company company)  {
+	@Produces({MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON})
+	public String updateCompany(Company company) throws FacadeException {
 
 		//Company company = adminFacade.getCompany(companyId);
 		try 
@@ -170,7 +171,7 @@ public class AdminService
 		} 
 		catch (FacadeException e)
 		{
-			return e.getMessage();
+			throw e;
 		}
 		
 	}
@@ -194,7 +195,7 @@ public class AdminService
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getAllCompanies")
-	public Collection<Company> getAllCompanies()  
+	public Collection<Company> getAllCompanies() throws FacadeException 
 	{
 		try 
 		{
@@ -202,14 +203,15 @@ public class AdminService
 		} 
 		catch (FacadeException e) 
 		{
-			return null;
+			throw e;
 		}
 	}
 	
 
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/getCoupons")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/getCoupons/")
 	public Collection<Coupon> getCoupons(Customer customer)  {	
 		try 
 		{

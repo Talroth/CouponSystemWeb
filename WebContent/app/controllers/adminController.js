@@ -3,9 +3,9 @@ app.controller('adminController', ['$scope', '$http', '$location', '$mdDialog', 
 
 $scope.customerHeaders = [{"name":'Id'},{"name":'Customer name'},{"name":'Password'}];
 $scope.companyHeaders = [{"name":'Id'},{"name":'Company name'},{"name":'Password'},{"name":'email'}];
-
+$scope.couponHeaders = [{"name" : 'Id'},{"name" : 'Title'},{"name" : 'Start Date'},{"name" : 'End Date'},{"name" : 'Amount'},{"name" : 'Coupon Type'}];
 var path = 'http://' + $location.host() + ':' + $location.port() + '/CouponSystemWeb/rest/adminService'; 
-
+$scope.showCoupons = false;
 
 
 /* Customer section */
@@ -20,6 +20,8 @@ $http({
 
 }).error(function(response) {
      console.log("error occurred."); 
+     console.log(response);
+     $scope.openToast(response.message)
    });
 }
 
@@ -32,18 +34,20 @@ $scope.updateCustomer = function(customer) {
   }).success(function(response) {
      console.log(response); 
      console.log(customer);
+	 $scope.openToast(customer.custName + " was updated")
      $scope.response = response;
 
 }).error(function(response) {
      console.log("error occurred."); 
-     console.log(customer);
+     console.log(response);
+     $scope.openToast(response.message)
      $scope.response = response;
    });   
  
 }
 
 $scope.removeCustomer = function(customer) {	
-	 $http({
+	 return $http({
 	  url: path + '/removeCustomer/', 
 	  method: 'DELETE',  
 	    data: customer,
@@ -75,6 +79,7 @@ $scope.createCustomer = function(customer) {
 	}).error(function(response) {
 	     console.log("error occurred."); 
 	     console.log(customer);
+	     console.log(response); 
 	   }); 
 	 
 	}
@@ -96,12 +101,88 @@ $scope.getAllCompanies = function() {
 	   });
 	}
 
+$scope.createCompany = function(company) {	
+	 return $http({
+	  url: path + '/createCompany', 
+	  method: 'POST',  
+	    data: company,
+	    accepts: 'application/json'
+	  }).success(function(response) {
+	     console.log("response from createCompany: " + response.id); 
+	     console.log("company from createCompany: " + company.id);
+	     console.log("data: " + response.id); 
+	     
+	}).error(function(response) {
+	     console.log("error occurred."); 
+	     console.log(company);
+	     console.log(response); 
+	   }); 
+	 
+	}
 
- 
+$scope.removeCompany = function(company) {	
+	 return $http({
+	  url: path + '/removeCompany/', 
+	  method: 'DELETE',  
+	    data: company,
+	    content: 'application/json',
+	    accepts: 'text/plain'
+	  }).success(function(response) {
+	     console.log(response); 
+	     console.log(company); 
+
+	}).error(function(response) {
+	     console.log("error occurred."); 
+	     console.log(company);
+	   });   
+	 
+	}
+
+$scope.updateCompany = function(company) {	
+	 $http({
+	  url: path + '/updateCompany/', 
+	  method: 'PUT',  
+	    data: company,
+	    accepts: 'text/plain'
+	  }).success(function(response) {
+	     console.log(response); 
+	     console.log(company);
+
+	    $scope.openToast(company.compName + " was updated")
+
+	}).error(function(response) {
+	     console.log("error occurred."); 
+	     console.log(company);
+	     $scope.openToast(response.message);
+	     $scope.response = response;
+	   });   
+	 
+	}
+
+/* Coupons */
+
+$scope.getCoupons = function(customer) {
+	return $http({
+	  url: path + '/getCoupons/', 
+	  method: 'POST',  
+	  data: customer,
+	    content: 'application/json',
+	    accepts: 'application/json'
+	  }).success(function(response) {
+	     console.log("ok");
+	     console.log(response);
+
+	}).error(function(response) {
+	     console.log("error occurred."); 
+	   });
+	}
+
 /* Dialog */
 
 
-  $scope.showDialog = function($event) {
+  $scope.showCreateDialog = function($event,customerOrCompany) {
+	  if (customerOrCompany === 'Customer')
+		  {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
         parent: parentEl,
@@ -112,19 +193,19 @@ $scope.getAllCompanies = function() {
           '<md-dialog aria-label="List dialog">' +
           '  <md-dialog-content>'+
       	'<md-input-container class="md-block" flex-gt-sm>' +
-          '<label>New customer name</label>' +
-          '<input ng-model="newCustName">' +
+      	'<label>New customer name</label>'  +
+      	'<input ng-model="newCustName">'  +
           '</md-input-container>' +
           '<md-input-container class="md-block" flex-gt-sm>' +
-          '<label>New customer password</label>' +
-          '<input ng-model="newCustPassword">' +
+          '<label>New customer password</label>'  +
+        		  '<input ng-model="newCustPassword">'  +
           '</md-input-container>' +
           '  </md-dialog-content>' +
           '  <md-dialog-actions>' +
           '    <md-button ng-click="closeDialog()" class="md-primary">' +
           '      Close Dialog' +
           '    </md-button>' +
-          '    <md-button ng-click="Add(newCustName,newCustPassword)" class="md-primary">' +
+          '    <md-button ng-click="AddCustomer(newCustName,newCustPassword)" class="md-primary">' +
           '      Add' +
           '    </md-button>' +
           '  </md-dialog-actions>' +
@@ -133,36 +214,95 @@ $scope.getAllCompanies = function() {
         controller: DialogController
      })
      
-      
+		  }
+	  else if (customerOrCompany === 'Company')
+		  {
+	      var parentEl = angular.element(document.body);
+	      $mdDialog.show({
+	        parent: parentEl,
+	        scope: $scope,
+	        preserveScope: true,
+	        targetEvent: $event,
+	        template:
+	          '<md-dialog aria-label="List dialog">' +
+	          '  <md-dialog-content>'+
+	      	'<md-input-container class="md-block" flex-gt-sm>' +
+	      	'<label>New company name</label>'  +
+	      	'<input ng-model="newCompName">'  +
+	          '</md-input-container>' +
+	          '<md-input-container class="md-block" flex-gt-sm>' +
+	          '<label>New company password</label>'  +
+	        		  '<input ng-model="newCompPassword">'  +
+	          '</md-input-container>' +
+	          '<md-input-container class="md-block" flex-gt-sm>' +
+	         '<label>New company email</label>'  +
+	        	'<input ng-model="newCompEmail">'  +
+	          '</md-input-container>'  +
+	          '  </md-dialog-content>' +
+	          '  <md-dialog-actions>' +
+	          '    <md-button ng-click="closeDialog()" class="md-primary">' +
+	          '      Close Dialog' +
+	          '    </md-button>' +
+	          '    <md-button ng-click="AddCompany(newCompName,newCompPassword,newCompEmail)" class="md-primary">' +
+	          '      Add' +
+	          '    </md-button>' +
+	          '  </md-dialog-actions>' +
+	          '</md-dialog>',
+
+	        controller: DialogController
+	     })
+		  }
      function DialogController($scope, $mdDialog) {
 
 	      
        $scope.closeDialog = function() {
          $mdDialog.hide();
        }
-       $scope.Add = function(newCustName,newCustPassword)
+       $scope.AddCustomer = function(newCustName,newCustPassword)
        {
     	      this.newLocalCustomer = {custName : newCustName, password : newCustPassword, id : '0'}; 
     	      console.log("+ " + this.newLocalCustomer.custName + "," + this.newLocalCustomer.password);
     	         	       
     	      	  $scope.createCustomer(this.newLocalCustomer).then(function(response) {
-    	      		  $scope.customerList = $scope.customerList.concat(response.data);	
-    	      	  });
-
-    	   $mdDialog.hide(); 
-    	   
+    	      		$scope.customerList = $scope.customerList.concat(response.data);	
+    	      		$scope.openToast(response.data.custName + " was added");
+    	      	  },function(error) { 
+    	      		  console.log(error.data.message);
+    	      		  $scope.openToast(error.data.message);
+    	      		  });
+    	    	   
+    		       $scope.newCustPassword = '';
+    	  	       $scope.newCustName = ''; 
+    	  	       $mdDialog.hide(); 
        }
-	       $scope.newCustPassword = '';
-  	       $scope.newCustName = ''; 
+    	      
+    	          $scope.AddCompany = function(newCompName,newCompPassword,newCompEmail)
+    	          {
+    	        	  console.log("Enter addcompany method");
+    	       	      this.newLocalCompany = {compName : newCompName, password : newCompPassword, email : newCompEmail, id : '0'}; 
+    	       	      console.log("+ " + this.newLocalCompany.compName + "," + this.newLocalCompany.password);
+    	       	         	       
+    	       	      	  $scope.createCompany(this.newLocalCompany).then(function(response) {
+    	       	      		$scope.companyList = $scope.companyList.concat(response.data);	
+    	       	      		$scope.openToast(response.data.compName + " was added");
+    	       	      	  },function(error) { 
+    	       	      		  console.log(error.data.message);
+    	       	      		  $scope.openToast(error.data.message);
+    	       	      		  });  
+    	       	      	  
+    	       	      	$scope.newCompName = '';
+    	       	      	$scope.newCompPassword = '';
+    	       	      	$scope.newCompEmail = '';
+    	       	      	$mdDialog.hide(); 
+    	          }
+
    }
             
  }
 
  /* Delete customer dialog */
-
-
   
-	  $scope.removeCustomerDialog = function($event, customerIndex, customer, customers) {
+	  $scope.removeDialog = function($event, Index, individual, list,customerOrCompany) {
 	      var parentEl = angular.element(document.body);
 	      $mdDialog.show({
 	        parent: parentEl,
@@ -189,18 +329,38 @@ $scope.getAllCompanies = function() {
 	      
 	     function DialogController($scope, $mdDialog) {
 
-		      
+	       var removing;  
+	       var individualText;
 	       $scope.closeDialog = function() {
 	         $mdDialog.hide();
 	       }
+	       
 	       $scope.Remove = function()
 	       {
-	    	  this.plannedRemoveCustomer = "{\"custName\" : \"" + customer.custName + "\", \"password\" : \"" + customer.password + "\", \"id\" : \"" + customer.id.toString() + "\"}"; 
+	    	  if (customerOrCompany === 'Customer')
+	    		  {
+	    		  	this.plannedRemoveIndividual = "{\"custName\" : \"" + individual.custName + "\", \"password\" : \"" + individual.password + "\", \"id\" : \"" + individual.id.toString() + "\"}";
+	    		  	removing = $scope.removeCustomer;
+	    		  	individualText = individual.custName;
+	    		  }
+	    	  else if (customerOrCompany === 'Company')
+	    		  {
+	    		  	this.plannedRemoveIndividual = "{\"custName\" : \"" + individual.compName + "\", \"password\" : \"" + individual.password + "\", \"email\" : \"" + individual.email + "\", \"id\" : \"" + individual.id.toString() + "\"}";
+	    		  	removing = $scope.removeCompany;
+	    		  	individualText = individual.compName;
+	    		  }
+	    	  
+	    	   
+	    	  
 	 	      console.log("-`-`-`");
-		      console.log(this.plannedRemoveCustomer);
+		      console.log(this.plannedRemoveIndividual);
 		      console.log("-`-`-`");
-		      $scope.removeCustomer(this.plannedRemoveCustomer);
-		      customers.splice(customerIndex,1);
+		      removing(this.plannedRemoveIndividual).then(function(response){
+		      list.splice(Index,1);
+		      $scope.openToast(individualText + " was removed");
+	       },function(error) {
+	    	   $scope.openToast(error.data.message);
+	       });
 	    	  $mdDialog.hide(); 
 	    	   
 	       }
@@ -217,6 +377,17 @@ $scope.getAllCompanies = function() {
                  .hideDelay(3000)
            );
 	  };
+	
+
+  $scope.openCouponsTable = function(customer)
+  {
+	  $scope.showCoupons = true;
+	  $scope.getCoupons(customer).then(function(response) {
+		  $scope.couponList = response.data;
+		  console.log("** " + response.data.id);
+		  });
+	  
+  }
   
 }]);
 
