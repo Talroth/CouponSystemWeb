@@ -44,12 +44,13 @@
       <td md-cell>{{coupon.id}}</td>
       <td md-cell>{{coupon.title}}</td>
       <td md-cell>{{coupon.startDate | date}}</td>
-      <td md-cell><md-datepicker  ng-model="dataMod[$index].dt"></md-datepicker></td>
+      <td md-cell><md-datepicker ng-model="dataMod[$index].dt"></md-datepicker>(MM/dd/yyyy)</td>
       <td md-cell>{{coupon.amount}}</td>
       <td md-cell>{{coupon.type}}</td>	
       <td md-cell>{{coupon.message}}</td>
-       <td md-cell><input type="text" style="background-color: #85e085; border: 1px solid #000000;"
-					ng-model="coupon.price"/></td>						
+       <td md-cell><form name="formPrice"><input name="priceText" type="text" style="background-color: #85e085; border: 1px solid #000000;"
+					  pattern="\d+(\.\d{2,2})?" ng-model="coupon.price"/></form>
+					<p><code>val: {{ formPrice.priceText.$valid }}</code></p></td>						
 	<td md-cell><md-button class="md-raised md-primary" ng-disabled="" ng-click="">Save</md-button>
 	<md-button class="md-raised md-primary"  ng-click="">Remove</md-button></td>
 	 </tr>
