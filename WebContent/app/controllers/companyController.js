@@ -7,10 +7,15 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	$scope.getAllCoupons().then(function(response){
 		$scope.couponList = response.data;
 		$scope.dataMod = [];
+		
+		
 	    for (i = 0; i < $scope.couponList.length; i += 1) {
 	        $scope.dataMod.push({
-	            dt: new Date($scope.couponList[i].endDate)
+	            dt: new Date($scope.couponList[i].endDate),
+	            status: false
+	        	
 	        });
+	           
 	    }
 	},function(error) {});
 	
@@ -36,6 +41,7 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 
 		}).error(function(response) {
 		     console.log("error occurred."); 
+		     $scope.openToast(response.message)
 		   });
 		}
 	
@@ -53,10 +59,88 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		     console.log("error occurred."); 
 		   });
 		}
+	
+	$scope.updateCoupon = function(coupon,indx) {	
+
+		 $mdDateLocale.formatDateLocal = function(date) {
+			    var day = date.getDate();
+			    var monthIndex = date.getMonth();
+			    var year = date.getFullYear();
+
+			    return year + '-' + (monthIndex + 1) + '-' + day + 'T00:00';
+		};  
+		
+		coupon.endDate = $mdDateLocale.formatDateLocal($scope.dataMod[indx].dt)
+		
+		 $http({
+		  url: path + '/updateCoupon/', 
+		  method: 'PUT',  
+		    data: coupon,
+		    accepts: 'text/plain'
+		  }).success(function(response) {
+		     console.log(response); 
+		     console.log(coupon);
+			 $scope.openToast(coupon.title + " was updated")
+		     $scope.response = response;
+
+		}).error(function(response) {
+		     console.log("error occurred."); 
+		     console.log(response);
+		     $scope.openToast(response.message)
+		     $scope.response = response;
+		   });   
+		 
+		}
+	
+	/* TODO: Add dialog with success option which remove the row in case remove done successfully
+	$scope.removeCoupon = function(coupon) {	
+		 return $http({
+		  url: path + '/removeCoupon/', 
+		  method: 'DELETE',  
+		    data: coupon,
+		    content: 'application/json',
+		    accepts: 'text/plain'
+		  }).success(function(response) {
+			 $scope.openToast(coupon.title + ' was removed');
+		     console.log(response); 
+		     console.log(coupon); 
+
+		}).error(function(response) {
+		     console.log("error occurred."); 
+		     console.log(coupon);
+		   });   
+		 
+		}
+	
+	/* Toast affect function */
+	  $scope.openToast = function(msg) {
+	      $mdToast.show(
+	              $mdToast.simple()
+	                 .textContent(msg)                       
+	                 .hideDelay(3000)
+	           );
+		  };
+		  
 }]);
 
 app.config(function($mdDateLocaleProvider) {
 
-	$mdDateLocaleProvider.months = ['janvier', 'février', 'mars','-4-','-5-','-6-','-7-','-8-','-9-','-10-','-11-','-12-'];
+	 $mdDateLocaleProvider.formatDate = function(date) {
+		    var day = date.getDate();
+		    var monthIndex = date.getMonth();
+		    var year = date.getFullYear();
+
+		    return year + '-' + (monthIndex + 1) + '-' + day;
+	    };
+	})
+	
+	// allow angularjs to send for DELETE JSON format
+app.config(function($httpProvider) {
+	  /**
+	   * make delete type json
+	   */
+	  $httpProvider.defaults.headers["delete"] = {
+	    'Content-Type': 'application/json;charset=utf-8'
+	  };
 	})
 	
