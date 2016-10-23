@@ -2,6 +2,7 @@ var app = angular.module('company', ['ngMaterial','md.data.table']);
 app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog', '$mdToast','$rootScope','$timeout','$mdDateLocale', function ($scope, $http, $location, $mdDialog, $mdToast, $rootScope,$timeout,$mdDateLocale) {
 	$scope.couponHeaders = [{"name" : 'Id'},{"name" : 'Title'},{"name" : 'Start Date'},{"name" : 'End Date'},{"name" : 'Amount'},{"name" : 'Coupon Type'},{"name" : 'Message'}, {"name" : 'Price'}];
 	var path = 'http://' + $location.host() + ':' + $location.port() + '/CouponSystemWeb/rest/companyService'; 
+	$scope.couponType = ["RESTURANS", "ELECTRICITY", "FOOD", "HEALTH", "SPORTS", "CAMPING", "TRAVELLING", "OTHER"];
 	
 	$scope.init = function() {
 	$scope.getAllCoupons().then(function(response){
@@ -26,6 +27,61 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 
 	}
 	
+	$scope.filterByCouponType = function(coupType) {
+		$scope.getCouponByType(coupType).then(function(response) {
+			$scope.couponList = response.data;
+			$scope.dataMod = [];
+						
+		    for (i = 0; i < $scope.couponList.length; i += 1) {
+		        $scope.dataMod.push({
+		            dt: new Date($scope.couponList[i].endDate),
+		            status: false		        	
+		        })}
+		    
+		}, function(error) {
+			
+		});
+	}
+	
+	$scope.filterByPrice = function(minPrice,maxPrice) {
+		$scope.getCouponByPrice(minPrice,maxPrice).then(function(response) {
+			$scope.couponList = response.data;
+			$scope.dataMod = [];
+						
+		    for (i = 0; i < $scope.couponList.length; i += 1) {
+		        $scope.dataMod.push({
+		            dt: new Date($scope.couponList[i].endDate),
+		            status: false		        	
+		        })}
+		    
+		}, function(error) {
+			
+		});
+	}
+	
+	$scope.filterByEndDate = function(endDateFilter) {
+		 $mdDateLocale.formatDateLocal = function(date) {
+			    var day = ((date.getDate())>=10)? (date.getDate()) : '0' + (date.getDate());
+			    var monthIndex = ((date.getMonth()+1)>=10)? (date.getMonth()+1) : '0' + (date.getMonth()+1); 
+			    var year = date.getFullYear();
+
+			    return year + '-' + (monthIndex + 1) + '-' + day + 'T00:00:00';
+		}; 
+		$scope.getCouponByEndDate($mdDateLocale.formatDateLocal(endDateFilter)).then(function(response) {
+			$scope.couponList = response.data;
+			$scope.dataMod = [];
+						
+		    for (i = 0; i < $scope.couponList.length; i += 1) {
+		        $scope.dataMod.push({
+		            dt: new Date($scope.couponList[i].endDate),
+		            status: false		        	
+		        })}
+		    
+		}, function(error) {
+			
+		});
+	}
+	
 
 	
 	
@@ -44,6 +100,22 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		     $scope.openToast(response.message)
 		   });
 		}
+	
+	$scope.createCoupon = function(coupon) {
+		return $http({
+			  url: path + '/createCoupon', 
+			  method: 'POST',  
+			  data: coupon,
+			    content: 'application/json',
+			    accepts: 'application/json'
+			  }).success(function(response) {
+			     console.log("ok");
+			     console.log(response);
+
+			}).error(function(response) {
+			     console.log("error occurred."); 
+			   });	
+	}
 	
 	$scope.getCompanyDetails = function() {
 		return $http({
@@ -91,8 +163,10 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		   });   
 		 
 		}
-	
-	/* TODO: Add dialog with success option which remove the row in case remove done successfully
+
+    
+	/* TODO: Add dialog with success option which remove the row in case remove done successfully */
+    
 	$scope.removeCoupon = function(coupon) {	
 		 return $http({
 		  url: path + '/removeCoupon/', 
@@ -101,7 +175,6 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		    content: 'application/json',
 		    accepts: 'text/plain'
 		  }).success(function(response) {
-			 $scope.openToast(coupon.title + ' was removed');
 		     console.log(response); 
 		     console.log(coupon); 
 
@@ -112,7 +185,53 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		 
 		}
 	
+	$scope.getCouponByType = function(coupType) {
+		return $http({
+			  url: path + '/getCouponByType/' + coupType, 
+			  method: 'GET',  
+			    content: 'application/json',
+			    accepts: 'application/json'
+			  }).success(function(response) {
+			     console.log("ok");
+			     console.log(response);
+
+			}).error(function(response) {
+			     console.log("error occurred."); 
+			   });
+	}
+	
+	$scope.getCouponByPrice = function(minPrice, maxPrice) {
+		return $http({
+			  url: path + '/getCouponByPrice/' + minPrice + "," + maxPrice, 
+			  method: 'GET',  
+			    content: 'application/json',
+			    accepts: 'application/json'
+			  }).success(function(response) {
+			     console.log("ok");
+			     console.log(response);
+
+			}).error(function(response) {
+			     console.log("error occurred."); 
+			   });
+	}
+	
+	$scope.getCouponByEndDate = function(endDate) {
+		return $http({
+			  url: path + '/getCouponByEndDate/' + endDate, 
+			  method: 'GET',  
+			    content: 'application/json',
+			    accepts: 'application/json'
+			  }).success(function(response) {
+			     console.log("ok");
+			     console.log(response);
+
+			}).error(function(response) {
+			     console.log("error occurred."); 
+			   });
+	}
+	
 	/* Toast affect function */
+    
 	  $scope.openToast = function(msg) {
 	      $mdToast.show(
 	              $mdToast.simple()
@@ -121,11 +240,186 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	           );
 		  };
 		  
+
+		  $scope.addDialog = function($event) {
+			  $scope.newEndDate = new Date();
+			  $scope.newStartDate = new Date();
+			  $scope.newAmount = 1;
+			  
+
+				
+		      var parentEl = angular.element(document.body);
+		      $mdDialog.show({
+		        parent: parentEl,
+		        scope: $scope,
+		        preserveScope: true,
+		        targetEvent: $event,
+		        template:
+		          '<md-dialog aria-label="List dialog">' +
+		          '  <md-dialog-content>'+
+		      	'<md-input-container class="md-block" flex-gt-sm>' +
+		      	'<label>Coupon title</label>'  +
+		      	'<input ng-model="newTitle">'  +
+		          '</md-input-container>' +
+		          '<md-input-container class="md-block" flex-gt-sm>' +
+		          '<label>Start date</label>'  +
+		           '<md-datepicker ng-model="newStartDate"></md-datepicker>'  +
+		          '</md-input-container>' +
+		          '<md-input-container class="md-block" flex-gt-sm>' +
+		         '<label>End Date</label>'  +
+		        	'<md-datepicker ng-model="newEndDate"></md-datepicker>'  +
+		          '</md-input-container>'  +
+			      	'<md-input-container class="md-block" flex-gt-sm>' +
+			      	'<label>Amount</label>'  +
+			      	'<input ng-model="newAmount">'  +
+			          '</md-input-container>' +
+				      	'<md-input-container class="md-block" flex-gt-sm>' +
+				      	'<md-select ng-model="newCouponType" placeholder="Coupon Type">' +
+			              '<md-option ng-repeat="types in couponType" value="{{ types }}">' +
+		                '{{ types }} </md-option>' +
+		                '</md-select>' +
+				          '</md-input-container>' +
+					      	'<md-input-container class="md-block" flex-gt-sm>' +
+					      	'<label>Message</label>'  +
+					      	'<input ng-model="newMessage">'  +
+					          '</md-input-container>' +
+						      	'<md-input-container class="md-block" flex-gt-sm>' +
+						      	'<label>Price</label>'  +
+						      	'<input  type="number" ng-model="newPrice">'  +
+						          '</md-input-container>' +
+							      	'<md-input-container class="md-block" flex-gt-sm>' +
+							      	'<label>Image</label>'  +
+							      	'<input ng-model="newImage">'  +
+							          '</md-input-container>' +
+		          '  </md-dialog-content>' +
+		          '  <md-dialog-actions>' +
+		          '    <md-button ng-click="closeDialog()" class="md-primary">' +
+		          '      Close Dialog' +
+		          '    </md-button>' +
+		          '    <md-button ng-click="createNewCoupon()" class="md-primary">' +
+		          '      Add' +
+		          '    </md-button>' +
+		          '  </md-dialog-actions>' +
+		          '</md-dialog>',
+
+		        controller: DialogController
+		     })
+		     
+		          function DialogController($scope, $mdDialog) {      
+		    	  $scope.closeDialog = function() {
+		    		  $mdDialog.hide();
+		    	  }  	    	  
+		     }
+		      
+		      $scope.createNewCoupon = function()
+		      {
+					 $mdDateLocale.formatDateLocal = function(date) {
+						    var day = date.getDate();
+						    var monthIndex = date.getMonth();
+						    var year = date.getFullYear();
+
+						    return year + '-' + (monthIndex + 1) + '-' + day + 'T00:00';
+					}; 
+					
+				  var strEndDate =  $mdDateLocale.formatDateLocal($scope.newEndDate);
+
+				  var strStartDate = $mdDateLocale.formatDateLocal($scope.newStartDate);
+		    	  
+	    		  	var newCoupon = "{\"amount\" : \"" + $scope.newAmount + "\", \"endDate\" : \"" + strEndDate + "\", \"image\" : \"" +
+	    		  	$scope.newImage + "\", \"message\" : \"" + $scope.newMessage + "\", \"price\" : \"" + $scope.newPrice +
+	    		  	"\", \"startDate\" : \"" + strStartDate + "\", \"title\" : \"" + $scope.newTitle + "\", \"type\" : \"" + $scope.newCouponType + "\"}";
+	    		  	
+
+		    	  $scope.createCoupon(newCoupon).success(function(response){ 
+		    		  if (response === "ok") 
+		    		  {
+		    			  $scope.openToast($scope.newTitle + " was created");
+		    			  
+		    			  $scope.couponList = $scope.couponList.concat("{startDate: Date('2016-10-23'), endDate: Date('2016-10-23'), amount: 1, id: 115, image: '676', title: 'hope', type: 'ELECTRICITY', message : 'hi', price : 20.20}");  	
+		    			  }
+		    		  else 
+		    		  {
+		    			  $scope.openToast(response)
+		    			  }
+		    		  },function(error){
+		    			  $scope.openToast(error.data.message)
+		    			  }
+		    		  
+		    	  );
+		    	  $mdDialog.hide();
+		      }
+		  }
+		  
+
+		  /* Delete coupon dialog */
+		  
+		  $scope.removeDialog = function($event, Index, coupon, list) {
+		      var parentEl = angular.element(document.body);
+		      $mdDialog.show({
+		        parent: parentEl,
+		        scope: $scope,
+		        preserveScope: true,
+		        targetEvent: $event,
+		        template:
+		          '<md-dialog aria-label="List dialog">' +
+		          '  <md-dialog-content>'+
+		      	'<md-input-container class="md-block" flex-gt-sm>' +
+		          '<label>Would you like to delete the coupon?</label>' +
+		          '  <md-dialog-actions>' +
+		          '    <md-button ng-click="closeDialog()" class="md-primary">' +
+		          '      No' +
+		          '    </md-button>' +
+		          '    <md-button ng-click="Remove()" class="md-primary">' +
+		          '      Yes' +
+		          '    </md-button>' +
+		          '  </md-dialog-actions>' +
+		          '</md-dialog>',
+		        controller: DialogController
+		     })
+		     
+		      
+		     function DialogController($scope, $mdDialog) {
+
+		       $scope.closeDialog = function() {
+		         $mdDialog.hide();
+		       }
+		       
+		       $scope.Remove = function()
+		       {
+		    		  	var couponToDel = "{\"amount\" : \"" + coupon.amount + "\", \"endDate\" : \"" + coupon.endDate + "\", \"id\" : \"" + coupon.id + "\", \"image\" : \"" +
+		    		  	coupon.image + "\", \"message\" : \"" + coupon.message + "\", \"price\" : \"" + coupon.price +
+		    		  	"\", \"startDate\" : \"" + coupon.startDate + "\", \"title\" : \"" + coupon.title + "\", \"type\" : \"" + coupon.type + "\"}";
+		    	   
+			      $scope.removeCoupon(couponToDel).then(function(response){
+			    	  
+			    	  if (response.data === "ok")
+			    		  {
+			    		  	list.splice(Index,1);
+			      			$scope.openToast(couponToDel.title + " was removed");
+			    		  }
+			    	  else
+			    		  {
+			    		  $scope.openToast(response.data.data);
+			    		  }
+		       },function(error) {
+		    	   $scope.openToast(error.data.message);
+		       });
+		    	  $mdDialog.hide(); 		    	   
+		       }
+
+		   }		            
+		 }
+		  
 }]);
 
 app.config(function($mdDateLocaleProvider) {
 
 	 $mdDateLocaleProvider.formatDate = function(date) {
+		 
+		 	if (date === undefined)
+		 		{
+		 			return null;
+		 		}
 		    var day = date.getDate();
 		    var monthIndex = date.getMonth();
 		    var year = date.getFullYear();

@@ -23,6 +23,34 @@
 </head>
 <body ng-app="company" ng-controller="companyController" ng-init="init()" style="background-color: #85e085;">
 <h1>{{companyDetails.compName}} - {{companyDetails.email}}</h1>
+<div style="float: left; border-right:solid;">
+<md-input-container class="md-block" flex-gt-sm>
+            <md-select ng-model="coupType">
+              <md-option ng-repeat="types in couponType" value="{{ types }}">
+                {{ types }}
+              </md-option>             
+            </md-select>
+            </md-input-container>
+            <md-dialog-actions>
+            <md-button  class="md-raised md-primary"  ng-click="filterByCouponType(coupType)">Filter by type</md-button>
+            </md-dialog-actions>
+            <md-input-container class="md-block" flex-gt-sm>
+            <input type="number" ng-model="minimumPrice" />
+            </md-input-container>
+            <md-input-container class="md-block" flex-gt-sm>
+            <input type="number" ng-model="maximumPrice" />
+            </md-input-container>
+            <md-dialog-actions>
+            <md-button  class="md-raised md-primary"  ng-click="filterByPrice(minimumPrice,maximumPrice)">Filter by price</md-button>
+            </md-dialog-actions>
+            <md-input-container class="md-block" flex-gt-sm>
+            <md-datepicker ng-model="endDateFilter"></md-datepicker>
+            </md-input-container>
+            <md-dialog-actions>
+            <md-button  class="md-raised md-primary"  ng-click="filterByEndDate(endDateFilter)">Filter by end date</md-button>
+            </md-dialog-actions>
+</div>
+<div style="margin-left:250px;">
 <md-table-container>
   <table md-table>
     <thead md-head md-order="myOrder">
@@ -52,13 +80,14 @@
 					  pattern="\d+(\.\d{2,2})?" ng-model="coupon.price"  /></form>
 					</td>						
 	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!(dataMod[$index].status) && !(formPrice.priceText.$valid)"  ng-click="updateCoupon(coupon,$index)">Save</md-button>
-	<md-button class="md-raised md-primary"  ng-click="removeCoupon(coupon)">Remove</md-button></td>
+	<md-button class="md-raised md-primary"  ng-click="removeDialog($event,$index,coupon,couponList)">Remove</md-button></td>
 	 </tr>
     </tbody>
   </table>
-  	  <md-button class="md-fab md-primary" ng-click="">
+  	  <md-button class="md-fab md-primary" ng-click="addDialog($event)">
       <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
       </md-button>
 </md-table-container>
+</div>
 </body>
 </html>
