@@ -20,9 +20,13 @@
 <script src="../app/js/angular-material.min.js"></script>
 <script src="../app/controllers/companyController.js"></script>
 <script src="../app/js/myComponent.js"></script>
+<script src="../app/js/ng-file-upload-shim.min.js"></script>
+<script src="../app/js/ng-file-upload.min.js"></script>
+
 </head>
 <body ng-app="company" ng-controller="companyController" ng-init="init()" style="background-color: #85e085;">
 <h1>{{companyDetails.compName}} - {{companyDetails.email}}</h1>
+<md-button  class="md-raised md-primary" ngf-select="upload($file)">Upload on file select</md-button>
 <div style="float: left; border-right:solid;">
 <md-input-container class="md-block" flex-gt-sm>
             <md-select ng-model="coupType">

@@ -1,8 +1,16 @@
 package com.CouponSystem.Service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
@@ -17,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.CouponSystem.Beans.Company;
 import com.CouponSystem.Beans.Coupon;
@@ -24,6 +33,9 @@ import com.CouponSystem.Beans.CouponType;
 import com.CouponSystem.CouponSystem.CouponSystem;
 import com.CouponSystem.Facade.CompanyFacade;
 import com.CouponSystem.FacadeException.FacadeException;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
 
 import DAOException.DAOExceptionErrorType;
 
@@ -32,6 +44,10 @@ public class CompanyService {
 
 	@Context
 	private HttpServletRequest request;
+	
+	@Context ServletContext context;
+	
+	
 	//private HttpServletResponse response;
 	private CouponSystem mainSystem = CouponSystem.getInstance();
 	private static final String FACADE_ATTRIBUTE  = "facadeAtt";
@@ -182,7 +198,60 @@ public class CompanyService {
 		}
 	}
 
+	@POST
+	@Path("/uploadImage")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Response  uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
+							     @FormDataParam("file") FormDataContentDisposition  fileDetail) {
+		String uploadedFileLocation = "/WebContent/img/" + fileDetail.getFileName();
+		System.out.println("loc: " + uploadedFileLocation); 
+		// TODO: to fix the folder issue
+		try {
+			URL resourceUrl = context.getResource("/WebContent/img/");
+			System.out.println(resourceUrl);
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
 
+
+		// save it
+		try
+		{
+			writeToFile(uploadedInputStream, uploadedFileLocation);
+		}
+		catch (IOException e)
+		{
+		    return Response.status(500).entity("Fail to upload").build();
+		}
+
+		String output = "File uploaded to : " + uploadedFileLocation;
+
+		return Response.status(200).entity(output).build();
+		
+	}
+	
+
+	// save uploaded file to new location
+	private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws IOException
+	{
+		try (OutputStream out = new FileOutputStream(new File(
+				uploadedFileLocation)))
+		{
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			//out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			//out.close();
+		}
+	}
+	
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("/login")
