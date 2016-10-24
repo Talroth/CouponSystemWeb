@@ -203,19 +203,7 @@ public class CompanyService {
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response  uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
 							     @FormDataParam("file") FormDataContentDisposition  fileDetail) {
-		String uploadedFileLocation = "/WebContent/img/" + fileDetail.getFileName();
-		System.out.println("loc: " + uploadedFileLocation); 
-		// TODO: to fix the folder issue
-		try {
-			URL resourceUrl = context.getResource("/WebContent/img/");
-			System.out.println(resourceUrl);
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-
+		String uploadedFileLocation = context.getRealPath(File.separator) + "img" + File.separator + fileDetail.getFileName();
 
 		// save it
 		try

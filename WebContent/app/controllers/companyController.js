@@ -5,11 +5,13 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	$scope.couponType = ["RESTURANS", "ELECTRICITY", "FOOD", "HEALTH", "SPORTS", "CAMPING", "TRAVELLING", "OTHER"];
 	
     $scope.upload = function (file) {
+    	$scope.newImage = file.name;
         Upload.upload({
             url: path + '/uploadImage',
             data: {file: file, 'username': $scope.username}
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            console.log(file);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
         }, function (evt) {
@@ -17,6 +19,7 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
         });
     };
+    
     
 	$scope.init = function() {
 	$scope.getAllCoupons().then(function(response){
@@ -302,15 +305,20 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 						      	'<input  type="number" ng-model="newPrice">'  +
 						          '</md-input-container>' +
 							      	'<md-input-container class="md-block" flex-gt-sm>' +
-							      	'<label>Image</label>'  +
-							      	'<input ng-model="newImage">'  +
-							          '</md-input-container>' +
+							      	'<label>Image: {{fileToUpload.name}}</label>'  +
+							      	'  <md-dialog-actions>' +
+							        '<label for="fileInput" class="md-button md-raised md-primary">Upload image</label>' +
+							      '</label>' +
+							      	'<input class="ng-hide" id="fileInput" type="file" accept="image/*" ngf-max-size="2MB"  ngf-select ng-model="fileToUpload" />' +
+							      	'  </md-dialog-actions>' +
+							      	'<img ngf-thumbnail="fileToUpload">' +
+							      	'</md-input-container>' +
 		          '  </md-dialog-content>' +
 		          '  <md-dialog-actions>' +
 		          '    <md-button ng-click="closeDialog()" class="md-primary">' +
 		          '      Close Dialog' +
 		          '    </md-button>' +
-		          '    <md-button ng-click="createNewCoupon()" class="md-primary">' +
+		          '    <md-button ng-click="upload(fileToUpload); createNewCoupon()" class="md-primary">' +
 		          '      Add' +
 		          '    </md-button>' +
 		          '  </md-dialog-actions>' +
