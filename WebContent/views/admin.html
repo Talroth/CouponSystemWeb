@@ -23,8 +23,8 @@
 </head>
 <body ng-app="admin" ng-controller="adminController" ng-init="init()" style="background-color: #85e085;">
 
-	<md-button class="md-raised md-primary" ng-click="custTbl=true; compTbl=false; getAllCustomer()">Customers</md-button>
-	<md-button class="md-raised md-primary" ng-click="custTbl=false; compTbl=true; getAllCompanies()">Companies</md-button>
+	<md-button class="md-raised md-primary" ng-click="showCoupons=false; custTbl=true; compTbl=false; getAllCustomer()">Customers</md-button>
+	<md-button class="md-raised md-primary" ng-click="showCoupons=false; custTbl=false; compTbl=true; getAllCompanies()">Companies</md-button>
 	<md-input-container ng-show=custTbl class="md-block" flex-gt-sm>
     <label>Search customer</label>
     <input ng-model="search.custName">
@@ -109,5 +109,6 @@
 </tbody>
 </table>
 </md-table-container>
+<h1 ng-show="couponList.length===0">No coupons were purchased</h1>
 </body>
 </html>
