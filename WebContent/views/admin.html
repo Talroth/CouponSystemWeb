@@ -43,9 +43,6 @@
       <!-- the variable myOrder will not be changed when this cell is clicked -->
       <th md-column md-order-by="custName">{{customerHeaders[1].name }}</th>
       <th md-column>{{customerHeaders[2].name }}</th>
-      <th md-column><md-button class="md-fab md-primary" ng-click="showCreateDialog($event,'Customer')">
-      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
-      </md-button></th>
     </thead>
     <tbody md-body>
       <!-- we can let ng-repeat sort the columns for us -->
@@ -60,6 +57,9 @@
 	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCustomer(cust);">Save</md-button></td>
 	<td md-cell><md-button class="md-raised md-primary"  ng-click="removeDialog($event,$index,cust,customerList,'Customer');">Remove</md-button></td>
 	 </tr>
+	  <td md-cell><md-button class="md-fab md-primary" ng-click="showCreateDialog($event,'Customer')">
+      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
+      </md-button></td>
     </tbody>
   </table>
 </md-table-container>
@@ -73,9 +73,6 @@
       <th md-column md-order-by="custName">{{companyHeaders[1].name }}</th>
       <th md-column>{{companyHeaders[2].name }}</th>
       <th md-column>{{companyHeaders[3].name }}</th>
-      <th md-column><md-button class="md-fab md-primary" ng-click="showCreateDialog($event,'Company')">
-      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
-      </md-button></th>
     </thead>
     <tbody md-body>
       <!-- we can let ng-repeat sort the columns for us -->
@@ -88,6 +85,9 @@
 	<td md-cell><md-button class="md-raised md-primary" ng-disabled="!passChanged" ng-click="passChanged = !passChanged; updateCompany(comp);">Save</md-button></td>
 	<td md-cell><md-button class="md-raised md-primary"  ng-click="removeDialog($event,$index,comp,companyList,'Company');">Remove</md-button></td>	
 	 </tr>
+	  <td md-cell><md-button class="md-fab md-primary" ng-click="showCreateDialog($event,'Company')">
+      <md-icon md-svg-icon="../img/icons/1475902602_plus.svg"></md-icon>
+      </md-button></td>
     </tbody>
   </table>
 </md-table-container>

@@ -79,7 +79,7 @@ public class AdminService
 	@PUT
 	@Path("/updateCustomer")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces({MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON})
+	@Produces(MediaType.TEXT_PLAIN)
 	public String updateCustomer(Customer customer) throws FacadeException {
 		try 
 		{
@@ -160,7 +160,7 @@ public class AdminService
 	@PUT
 	@Path("/updateCompany")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces({MediaType.TEXT_PLAIN,MediaType.APPLICATION_JSON})
+	@Produces(MediaType.TEXT_PLAIN)
 	public String updateCompany(Company company) throws FacadeException {
 
 		//Company company = adminFacade.getCompany(companyId);

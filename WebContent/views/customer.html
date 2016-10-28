@@ -135,7 +135,7 @@
             <p class="md-button">{{ coupon.price | currency }}</p>
             <p class="md-button">{{ coupon.type }}</p>
           <md-card-icon-actions>
-            <md-button ng-click = popConfirmation($event,coupon) class="md-fab md-primary" aria-label="Favorite">
+            <md-button ng-click="popConfirmation($event,coupon)" class="md-fab md-primary" aria-label="Favorite">
               <md-icon md-svg-icon="../img/icons/coins-on-hand.svg"></md-icon>
             </md-button>
           </md-card-icon-actions>
@@ -153,7 +153,7 @@
   </md-grid-list>
 </div>    
   
-
+<md-content id="toast-container"></md-content>
     
     <div class="footer">
       <div class="container">

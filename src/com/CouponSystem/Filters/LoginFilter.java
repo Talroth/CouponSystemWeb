@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 public class LoginFilter implements Filter 
 {
 	private static final String FACADE_ATTRIBUTE  = "facadeAtt";
-	private static final String LOGIN_PAGE  = "login.html";
+	private static final String LOGIN_PAGE  = "/login.html";
 	private static final String CUSTOMER_SERVICE_PATH  = "/rest/customerService/login";
 	private static final String COMPANY_SERVICE_PATH  = "/rest/companyService/login";
 	private static final String ADMIN_SERVICE_PATH  = "/rest/adminService/login";

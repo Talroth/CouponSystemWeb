@@ -20,8 +20,7 @@ $http({
 
 }).error(function(response) {
      console.log("error occurred."); 
-     console.log(response);
-     $scope.openToast(response.message)
+     $scope.openToast("Problem with the server connection, please try to login again")
    });
 }
 
@@ -30,7 +29,7 @@ $scope.updateCustomer = function(customer) {
   url: path + '/updateCustomer/', 
   method: 'PUT',  
     data: customer,
-    accepts: 'text/plain'
+    accepts: 'text/plain',
   }).success(function(response) {
      console.log(response); 
      console.log(customer);
@@ -39,9 +38,8 @@ $scope.updateCustomer = function(customer) {
 
 }).error(function(response) {
      console.log("error occurred."); 
-     console.log(response);
-     $scope.openToast(response.message)
-     $scope.response = response;
+     $scope.errorToast();
+ /*    $scope.response = response; */
    });   
  
 }
@@ -60,6 +58,7 @@ $scope.removeCustomer = function(customer) {
 	}).error(function(response) {
 	     console.log("error occurred."); 
 	     console.log(customer);
+	     $scope.errorToast();
 	   });   
 	 
 	}
@@ -80,6 +79,7 @@ $scope.createCustomer = function(customer) {
 	     console.log("error occurred."); 
 	     console.log(customer);
 	     console.log(response); 
+	     $scope.errorToast();
 	   }); 
 	 
 	}
@@ -98,6 +98,7 @@ $scope.getAllCompanies = function() {
 
 	}).error(function(response) {
 	     console.log("error occurred."); 
+	     $scope.errorToast();
 	   });
 	}
 
@@ -116,6 +117,7 @@ $scope.createCompany = function(company) {
 	     console.log("error occurred."); 
 	     console.log(company);
 	     console.log(response); 
+	     $scope.errorToast();
 	   }); 
 	 
 	}
@@ -134,6 +136,7 @@ $scope.removeCompany = function(company) {
 	}).error(function(response) {
 	     console.log("error occurred."); 
 	     console.log(company);
+	     $scope.errorToast();
 	   });   
 	 
 	}
@@ -148,13 +151,12 @@ $scope.updateCompany = function(company) {
 	     console.log(response); 
 	     console.log(company);
 
-	    $scope.openToast(company.compName + " was updated")
+	    $scope.openToast(company.compName + " was updated");
 
 	}).error(function(response) {
 	     console.log("error occurred."); 
-	     console.log(company);
-	     $scope.openToast(response.message);
-	     $scope.response = response;
+	     $scope.errorToast();
+
 	   });   
 	 
 	}
@@ -174,6 +176,7 @@ $scope.getCoupons = function(customer) {
 
 	}).error(function(response) {
 	     console.log("error occurred."); 
+	     $scope.errorToast();
 	   });
 	}
 
@@ -267,8 +270,15 @@ $scope.getCoupons = function(customer) {
     	      		$scope.customerList = $scope.customerList.concat(response.data);	
     	      		$scope.openToast(response.data.custName + " was added");
     	      	  },function(error) { 
+       	      		  if (error.data.message === undefined)
+   	      			  {
+   	      			$scope.errorToast();
+   	      			  }
+   	      		  else
+   	      			  {
     	      		  console.log(error.data.message);
     	      		  $scope.openToast(error.data.message);
+   	      			  }
     	      		  });
     	    	   
     		       $scope.newCustPassword = '';
@@ -286,8 +296,15 @@ $scope.getCoupons = function(customer) {
     	       	      		$scope.companyList = $scope.companyList.concat(response.data);	
     	       	      		$scope.openToast(response.data.compName + " was added");
     	       	      	  },function(error) { 
+    	       	      		  if (error.data.message === undefined)
+    	       	      			  {
+    	       	      			$scope.errorToast();
+    	       	      			  }
+    	       	      		  else
+    	       	      			  {
     	       	      		  console.log(error.data.message);
     	       	      		  $scope.openToast(error.data.message);
+    	       	      	  }
     	       	      		  });  
     	       	      	  
     	       	      	$scope.newCompName = '';
@@ -359,7 +376,14 @@ $scope.getCoupons = function(customer) {
 		      list.splice(Index,1);
 		      $scope.openToast(individualText + " was removed");
 	       },function(error) {
+	      		  if (error.data.message === undefined)
+	      			  {
+	      			$scope.errorToast();
+	      			  }
+	      		  else
+	      			  {
 	    	   $scope.openToast(error.data.message);
+	      			  }
 	       });
 	    	  $mdDialog.hide(); 
 	    	   
@@ -387,6 +411,10 @@ $scope.getCoupons = function(customer) {
 		  console.log("** " + response.data.id);
 		  });
 	  
+  }
+  
+  $scope.errorToast = function() {
+	  $scope.openToast("Problem with the server connection, please try to login again");
   }
   
 }]);
