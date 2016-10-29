@@ -5,8 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -109,13 +107,13 @@ public class CompanyService {
 			getFacade().updateCoupon(coupon);
 			return "ok";
 		} 
-		catch (FacadeException e) 
+		catch (FacadeException | IllegalArgumentException e) 
 		{
 			return e.getMessage();
 		}
-	}
 
-//h
+	}
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getCoupon/{id}")
