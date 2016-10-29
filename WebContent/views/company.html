@@ -62,10 +62,10 @@
       <th md-column md-order-by="id" md-numric>{{couponHeaders[0].name }}</th>
       <!-- the variable myOrder will not be changed when this cell is clicked -->
       <th md-column md-order-by="title">{{couponHeaders[1].name }}</th>
-      <th md-column md-order-by="startDate">{{couponHeaders[2].name }}</th>
+      <th md-column>{{couponHeaders[2].name }}</th>
       <th md-column>{{couponHeaders[3].name }}</th>
-      <th md-column md-numric md-order-by="amount">{{couponHeaders[4].name }}</th>
-      <th md-column md-order-by="type">{{couponHeaders[5].name }}</th>
+      <th md-column md-numric>{{couponHeaders[4].name }}</th>
+      <th md-column>{{couponHeaders[5].name }}</th>
       <th md-column>{{couponHeaders[6].name }}</th>
       <th md-column md-numric>{{couponHeaders[7].name }}</th>
 
@@ -76,7 +76,7 @@
       <td md-cell>{{coupon.id}}</td>
       <td md-cell>{{coupon.title}}</td>
       <td md-cell>{{coupon.startDate | date}}</td>
-      <td md-cell><md-datepicker  ng-model="dataMod[$index].dt"></md-datepicker></td>
+      <td md-cell><md-datepicker ng-model="dataMod[$index].dt"></md-datepicker></td>
       <td md-cell>{{coupon.amount}}</td>
       <td md-cell>{{coupon.type}}</td>	
       <td md-cell>{{coupon.message}}</td>

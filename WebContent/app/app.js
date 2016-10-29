@@ -7,15 +7,15 @@ app.controller("loginController", ['$scope', '$http', '$window', '$location', fu
 
 $scope.login = function() {
     $http({
-         //url: 'http://localhost:8080/CouponSystemWeb/rest/customerService/login?user=Bill Joe&password=bj',  
+         url: 'http://localhost:8080/CouponSystemWeb/rest/customerService/login?user=Bill Joe&password=bj',  
         /* url: 'http://localhost:8080/CouponSystemWeb/rest/adminService/login?user=admin&password=1234', */     
-          url: 'http://localhost:8080/CouponSystemWeb/rest/companyService/login?user=McHoland&password=f12e12',   
+       /*   url: 'http://localhost:8080/CouponSystemWeb/rest/companyService/login?user=McHoland&password=f12e12', */  
         method: 'POST'
     }).success(function(response){
         $scope.test = response;
-        //$window.location.href = "http://" + $location.host() + ":" + $location.port() + "/CouponSystemWeb/views/customer.html";  
+        $window.location.href = "http://" + $location.host() + ":" + $location.port() + "/CouponSystemWeb/views/customer.html";  
        /* $window.location.href = "http://" + $location.host() + ":" + $location.port() + "/CouponSystemWeb/views/admin.html";    */ 
-          $window.location.href = "http://" + $location.host() + ":" + $location.port() + "/CouponSystemWeb/views/company.html";   
+      /*    $window.location.href = "http://" + $location.host() + ":" + $location.port() + "/CouponSystemWeb/views/company.html"; */  
         /* "/customer.html"; */
     })
         .error(function(response){console.log("error occurred."); 

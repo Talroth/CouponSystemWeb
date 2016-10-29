@@ -4,13 +4,6 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	var path = 'http://' + $location.host() + ':' + $location.port() + '/CouponSystemWeb/rest/companyService'; 
 	$scope.couponType = ["RESTURANS", "ELECTRICITY", "FOOD", "HEALTH", "SPORTS", "CAMPING", "TRAVELLING", "OTHER"];
 	
-
-//	$scope.minDate = new Date(
-//		      $scope.myDate.getFullYear(),
-//		      $scope.myDate.getMonth() - 2,
-//		      $scope.myDate.getDate());
-	
-	
     $scope.upload = function (file) {
     	$scope.newImage = file.name;
         Upload.upload({
@@ -86,7 +79,7 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	$scope.filterByEndDate = function(endDateFilter) {
 		 $mdDateLocale.formatDateLocal = function(date) {
 			    var day = ((date.getDate())>=10)? (date.getDate()) : '0' + (date.getDate());
-			    var monthIndex = ((date.getMonth()+1)>=10)? (date.getMonth()) : '0' + (date.getMonth()); 
+			    var monthIndex = ((date.getMonth()+1)>=10)? (date.getMonth()+1) : '0' + (date.getMonth()+1); 
 			    var year = date.getFullYear();
 
 			    return year + '-' + (monthIndex + 1) + '-' + day + 'T00:00:00';
@@ -159,16 +152,14 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	$scope.updateCoupon = function(coupon,indx) {	
 
 		 $mdDateLocale.formatDateLocal = function(date) {
-			    var day = (date.getDate() >= 10) ? date.getDate() : "0" + date.getDate();
+			    var day = date.getDate();
 			    var monthIndex = date.getMonth();
 			    var year = date.getFullYear();
 
 			    return year + '-' + (monthIndex + 1) + '-' + day + 'T00:00';
 		};  
 		
-
 		coupon.endDate = $mdDateLocale.formatDateLocal($scope.dataMod[indx].dt)
-
 		
 		 $http({
 		  url: path + '/updateCoupon/', 
@@ -177,15 +168,9 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		    accepts: 'text/plain'
 		  }).success(function(response) {
 		     console.log(response); 
-		     if (response == "ok")
-		    	 {
-		    	 $scope.openToast(coupon.title + " was updated");
-		    	 }
-		     else
-		    	 {
-		    	 $scope.openToast(response);
-		    	 }
-			 
+		     console.log(coupon);
+			 $scope.openToast(coupon.title + " was updated")
+		     $scope.response = response;
 
 		}).error(function(response) {
 		     console.log("error occurred."); 
@@ -212,7 +197,7 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 
 		}).error(function(response) {
 		     console.log("error occurred."); 
-		     console.log(response);
+		     console.log(coupon);
 		   });   
 		 
 		}
@@ -351,7 +336,7 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		      $scope.createNewCoupon = function()
 		      {
 					 $mdDateLocale.formatDateLocal = function(date) {
-						    var day = (date.getDate() >= 10) ? date.getDate() : "0" + date.getDate();
+						    var day = date.getDate();
 						    var monthIndex = date.getMonth();
 						    var year = date.getFullYear();
 
@@ -370,17 +355,9 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		    	  $scope.createCoupon(newCoupon).success(function(response){ 
 		    		  if (response === "ok") 
 		    		  {
-		    			  $scope.couponList.push({startDate: $scope.newStartDate , endDate: Date(strEndDate), amount: $scope.newAmount, id: 115, image: $scope.newImage, title: $scope.newTitle, type: $scope.newCouponType, message : $scope.newMessage, price : $scope.newPrice, id: '-'});
 		    			  $scope.openToast($scope.newTitle + " was created");
-		    			  		    			  
-		    			  console.log($scope.couponList);
 		    			  
-		    			   
-			  		       $scope.dataMod.push({
-					            dt: new Date($scope.newEndDate),
-					            status: false		        	
-					        })	
-					        
+		    			  $scope.couponList = $scope.couponList.concat("{startDate: Date('2016-10-23'), endDate: Date('2016-10-23'), amount: 1, id: 115, image: '676', title: 'hope', type: 'ELECTRICITY', message : 'hi', price : 20.20}");  	
 		    			  }
 		    		  else 
 		    		  {
@@ -434,23 +411,19 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 		    		  	var couponToDel = "{\"amount\" : \"" + coupon.amount + "\", \"endDate\" : \"" + coupon.endDate + "\", \"id\" : \"" + coupon.id + "\", \"image\" : \"" +
 		    		  	coupon.image + "\", \"message\" : \"" + coupon.message + "\", \"price\" : \"" + coupon.price +
 		    		  	"\", \"startDate\" : \"" + coupon.startDate + "\", \"title\" : \"" + coupon.title + "\", \"type\" : \"" + coupon.type + "\"}";
-		    		  	
-		    	  var couponTitle = coupon.title; 
+		    	   
 			      $scope.removeCoupon(couponToDel).then(function(response){
 			    	  
 			    	  if (response.data === "ok")
 			    		  {
 			    		  	list.splice(Index,1);
-			    		  	$scope.dataMod.splice(Index,1);
-			      			$scope.openToast(couponTitle + " was removed");
+			      			$scope.openToast(couponToDel.title + " was removed");
 			    		  }
 			    	  else
 			    		  {
-			    		  console.log(response.data.data);
 			    		  $scope.openToast(response.data.data);
 			    		  }
 		       },function(error) {
-		    	   console.log(response.data.data);
 		    	   $scope.openToast(error.data.message);
 		       });
 		    	  $mdDialog.hide(); 		    	   
@@ -469,7 +442,7 @@ app.config(function($mdDateLocaleProvider) {
 		 		{
 		 			return null;
 		 		}
-		    var day = (date.getDate() >= 10) ? date.getDate() : "0" + date.getDate();
+		    var day = date.getDate();
 		    var monthIndex = date.getMonth();
 		    var year = date.getFullYear();
 
