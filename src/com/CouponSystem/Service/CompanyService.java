@@ -109,13 +109,13 @@ public class CompanyService {
 			getFacade().updateCoupon(coupon);
 			return "ok";
 		} 
-		catch (FacadeException | IllegalArgumentException e) 
+		catch (FacadeException e) 
 		{
 			return e.getMessage();
 		}
 	}
 
-
+//h
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getCoupon/{id}")
