@@ -124,42 +124,6 @@ $scope.init = function() {
     $scope.couponList = this.getAllPurchasedCoupons();
 }   
 
-//$scope.popConfirmation = function(ev, coupon) {
-//       var confirm = $mdDialog.confirm()
-//          .title('Are you sure you want to purchase this coupon ?')
-//          .textContent('Approve the purchasing process for ' + coupon.title + ' coupon')
-//          .ariaLabel('Lucky day')
-//          .targetEvent(ev)
-//   /*       .parent(angular.element(document.getElementById('toast-container')))  */ 
-//          .ok('Please do it!')
-//          .cancel('Sounds like a scam');
-//
-//    $mdDialog.show(confirm).then(function() {
-//      $scope.purchaseCoupon(coupon).then(function(response){
-//    	  console.log(response);
-//    	  console.log(response.data);
-//    	  console.log(response.data=="ok");
-//    	  if (response.data=="ok")
-//    		  {
-//    		  console.log("okkkkk");
-//    		  $scope.status = coupon.title + " was purchased";
-//    		  }
-//    	  else
-//    		  {
-//    		  console.log("not okkkkk");
-//    		  $scope.status = response.data;
-//    		  }
-//      },function(error){
-//    	  console.log("error");
-//    	  console.log(response);
-//    	  $scope.errorToast();
-//      });
-//      
-//    }, function() {
-//      $scope.status = 'no';
-//    }); 
-//    
-//};
 
 // purchase new coupon right after execute the popConfirmation method - need to be fixed
 $scope.popConfirmation = function($event,coupon) {
@@ -180,7 +144,7 @@ $scope.popConfirmation = function($event,coupon) {
         '    <md-button ng-click="closeDialog()" class="md-primary md-button ng-scope md-default-theme md-ink-ripple">' +
         '      Close Dialog' +
         '    </md-button>' +
-        '    <md-button ng-click="purchaseCoupon(coupon)" class="md-primary md-button md-default-theme md-ink-ripple">' +
+        '    <md-button ng-click="customerBuyCoupon()" class="md-primary md-button md-default-theme md-ink-ripple">' +
         '      Add' +
         '    </md-button>' +
         '  </md-dialog-actions>' +
@@ -194,7 +158,8 @@ $scope.popConfirmation = function($event,coupon) {
      $scope.closeDialog = function() {
        $mdDialog.hide();
      }
-
+     $scope.customerBuyCoupon = function() {
+    	 console.log(coupon);
          $scope.purchaseCoupon(coupon).then(function(response){
        	  console.log(response);
        	  console.log(response.data);
@@ -202,43 +167,26 @@ $scope.popConfirmation = function($event,coupon) {
        	  if (response.data=="ok")
        		  {
        		 console.log("okkkkk");
-      /* 		 $scope.openToast(coupon.title + " was purchased"); */
+       		 $scope.openToast(coupon.title + " was purchased"); 
        		  }
        	  else
        		  {
        		  console.log("not okkkkk");
-    /*   		$scope.openToast(response.data); */
+       		
+      		$scope.openToast(response.data);       		
        		  }
+       	
          },function(error){
        	  console.log("error");
        	  console.log(response);
        	  $scope.errorToast();
          });
+         $mdDialog.hide();
     }
+}
 }
 
   	      
-          
-
-/*
-<md-dialog md-theme="default" aria-label="Lucky day" ng-class="dialog.css" class="_md md-default-theme md-transition-in" role="dialog" tabindex="-1" aria-describedby="dialogContent_12">
-<md-dialog-content class="md-dialog-content" role="document" tabindex="-1" id="dialogContent_12">
-<h2 class="md-title ng-binding">Are you sure you want to purchase this coupon ?</h2>
-<!-- ngIf: ::dialog.mdHtmlContent --><!-- ngIf: ::!dialog.mdHtmlContent -->
-<div ng-if="::!dialog.mdHtmlContent" class="md-dialog-content-body ng-scope"
-><p class="ng-binding">Approve the purchasing process for Camping World coupon</p>
-</div>
-<!-- end ngIf: ::!dialog.mdHtmlContent -->
-<!-- ngIf: ::dialog.$type == 'prompt' -->
-</md-dialog-content><md-dialog-actions>
-<!-- ngIf: dialog.$type === 'confirm' || dialog.$type === 'prompt' -->
-<button class="md-primary md-button ng-scope md-default-theme md-ink-ripple" type="button" ng-transclude="" ng-if="dialog.$type === 'confirm' || dialog.$type === 'prompt'" ng-click="dialog.abort()"><span class="ng-binding ng-scope">Sounds like a scam</span>
-</button>
-<!-- end ngIf: dialog.$type === 'confirm' || dialog.$type === 'prompt' -->
-<button class="md-primary md-button md-default-theme md-ink-ripple" type="button" ng-transclude="" ng-click="dialog.hide()" md-autofocus="dialog.$type==='alert'"><span class="ng-binding ng-scope">Please do it!</span>
-</button></md-dialog-actions>
-</md-dialog>
-*/
 
 $scope.couponListSwitch = function() {
     if ($scope.isAll)
