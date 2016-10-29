@@ -5,10 +5,10 @@ app.controller('companyController', ['$scope', '$http', '$location', '$mdDialog'
 	$scope.couponType = ["RESTURANS", "ELECTRICITY", "FOOD", "HEALTH", "SPORTS", "CAMPING", "TRAVELLING", "OTHER"];
 	
 
-	$scope.minDate = new Date(
-		      $scope.myDate.getFullYear(),
-		      $scope.myDate.getMonth() - 2,
-		      $scope.myDate.getDate());
+//	$scope.minDate = new Date(
+//		      $scope.myDate.getFullYear(),
+//		      $scope.myDate.getMonth() - 2,
+//		      $scope.myDate.getDate());
 	
 	
     $scope.upload = function (file) {

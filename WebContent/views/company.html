@@ -76,7 +76,7 @@
       <td md-cell>{{coupon.id}}</td>
       <td md-cell>{{coupon.title}}</td>
       <td md-cell>{{coupon.startDate | date}}</td>
-      <td md-cell><md-datepicker md-min-date="new Date(coupon.startDate.getFullYear(),coupon.startDate.getMonth() - 2,coupon.startDate.getDate())" ng-model="dataMod[$index].dt"></md-datepicker></td>
+      <td md-cell><md-datepicker  ng-model="dataMod[$index].dt"></md-datepicker></td>
       <td md-cell>{{coupon.amount}}</td>
       <td md-cell>{{coupon.type}}</td>	
       <td md-cell>{{coupon.message}}</td>
