@@ -104,12 +104,6 @@ public class CompanyService {
 //			tmpCoupon.setType(coupon.getType());
 //			tmpCoupon.setMessage(coupon.getMessage());
 //			tmpCoupon.setPrice(coupon.getPrice());
-//			tmpCoupon.setImage(coupon.getImage());pCoupon.setStartDate(coupon.getStartDate());
-//			tmpCoupon.setEndDate(coupon.getEndDate());
-//			tmpCoupon.setAmount(coupon.getAmount());
-//			tmpCoupon.setType(coupon.getType());
-//			tmpCoupon.setMessage(coupon.getMessage());
-//			tmpCoupon.setPrice(coupon.getPrice());
 //			tmpCoupon.setImage(coupon.getImage());
 			System.out.println("*" + coupon.getEndDate().toString() + "*");
 			getFacade().updateCoupon(coupon);
