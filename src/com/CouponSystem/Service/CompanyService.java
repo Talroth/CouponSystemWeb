@@ -271,7 +271,6 @@ public class CompanyService {
 		}
 	}
 	
-	//h
 	@POST
 	@Path("/logout")
 	public String logout()
