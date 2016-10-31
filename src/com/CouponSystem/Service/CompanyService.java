@@ -93,7 +93,8 @@ public class CompanyService {
 
 		try 
 		{
-			Coupon tmpCoupon = new Coupon(coupon);
+//			@SuppressWarnings("unused")
+//			Coupon tmpCoupon = new Coupon(coupon);
 			System.out.println("*" + coupon.getEndDate().toString() + "*");
 			getFacade().updateCoupon(coupon);
 			return "ok";
