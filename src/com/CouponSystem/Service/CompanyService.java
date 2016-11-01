@@ -31,8 +31,8 @@ import com.CouponSystem.Beans.CouponType;
 import com.CouponSystem.CouponSystem.CouponSystem;
 import com.CouponSystem.Facade.CompanyFacade;
 import com.CouponSystem.FacadeException.FacadeException;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
+//import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+//import org.glassfish.jersey.media.multipart.FormDataParam;
 
 
 import DAOException.DAOExceptionErrorType;
@@ -199,28 +199,30 @@ public class CompanyService {
 		}
 	}
 
-	@POST
-	@Path("/uploadImage")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response  uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
-							     @FormDataParam("file") FormDataContentDisposition  fileDetail) {
-		String uploadedFileLocation = context.getRealPath(File.separator) + "img" + File.separator + fileDetail.getFileName();
-
-		// save it
-		try
-		{
-			writeToFile(uploadedInputStream, uploadedFileLocation);
-		}
-		catch (IOException e)
-		{
-		    return Response.status(500).entity("Fail to upload").build();
-		}
-
-		String output = "File uploaded to : " + uploadedFileLocation;
-
-		return Response.status(200).entity(output).build();
-		
-	}
+	
+	// TODO: return once library dwonload again
+//	@POST
+//	@Path("/uploadImage")
+//	@Consumes(MediaType.MULTIPART_FORM_DATA)
+//	public Response  uploadImage(@FormDataParam("file") InputStream uploadedInputStream,
+//							     @FormDataParam("file") FormDataContentDisposition  fileDetail) {
+//		String uploadedFileLocation = context.getRealPath(File.separator) + "img" + File.separator + fileDetail.getFileName();
+//
+//		// save it
+//		try
+//		{
+//			writeToFile(uploadedInputStream, uploadedFileLocation);
+//		}
+//		catch (IOException e)
+//		{
+//		    return Response.status(500).entity("Fail to upload").build();
+//		}
+//
+//		String output = "File uploaded to : " + uploadedFileLocation;
+//
+//		return Response.status(200).entity(output).build();
+//		
+//	}
 	
 
 	// save uploaded file to new location
